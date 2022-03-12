@@ -1,0 +1,130 @@
+<mvc:View
+	controllerName="com.codenames.fe.mvc.game.controller.Game"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:card="com.codenames.fe.mvc.game.view.card"
+	displayBlock="true"
+	xmlns:f="sap.f"
+	xmlns:tnt="sap.tnt"
+	busyIndicatorDelay="0"
+	height="100%"
+>
+	<Page title="">
+		<customHeader>
+			<Toolbar>
+				<tnt:InfoLabel
+					text="{=
+						${/Game/state} === 'BlueTeamThinkingState' ? 'Blue agents turn' :
+						${/Game/state} === 'RedTeamThinkingState' ? 'Red agents turn' :
+						${/Game/state} === 'BlueCaptainThinkingState' ? 'Blue captains turn' :
+						${/Game/state} === 'RedCaptainThinkingState' ? 'Red captains turn' :
+						${/Game/state} === 'FinishedGameState' ? 'Game finished' :
+						''
+					}"
+					width="100%"
+					colorScheme="{=
+						${/Game/state} === 'BlueTeamThinkingState' ? 6 :
+						${/Game/state} === 'RedTeamThinkingState' ? 3 :
+						${/Game/state} === 'BlueCaptainThinkingState' ? 6 :
+						${/Game/state} === 'RedCaptainThinkingState' ? 3 :
+						9
+					}"
+					icon="{=
+						${/Game/state} === 'BlueTeamThinkingState' ? 'sap-icon://add-employee' :
+						${/Game/state} === 'RedTeamThinkingState' ? 'sap-icon://add-employee' :
+						${/Game/state} === 'BlueCaptainThinkingState' ? 'sap-icon://manager' :
+						${/Game/state} === 'RedCaptainThinkingState' ? 'sap-icon://manager' :
+						''
+					}"
+				/>
+			</Toolbar>
+		</customHeader>
+		<VBox width="100%">
+			<HBox width="100%">
+				<Input
+					value="{/Game/word}"
+					width="100%"
+					placeholder="Captains clue"
+					editable="{/AmICaptain}"
+				>
+					<layoutData>
+						<FlexItemData minWidth="42.5%"/>
+					</layoutData>
+				</Input>
+				<Input
+					value="{/Game/wordCount}"
+					type="Number"
+					width="98%"
+					placeholder="Word count"
+					class="sapUiTinyMarginBegin"
+					editable="{/AmICaptain}"
+				>
+					<layoutData>
+						<FlexItemData minWidth="42.5%"/>
+					</layoutData>
+				</Input>
+				<Button
+					type="Accept"
+					text="Submit word"
+					icon="sap-icon://save"
+					class="sapUiTinyMarginBegin"
+					press="onButtonSubmitWordPress"
+				>
+					<layoutData>
+						<FlexItemData minWidth="10%"/>
+					</layoutData>
+				</Button>
+			</HBox>
+			<f:GridList
+				items="{/Game/board}"
+				class="editGrid sapUiTinyMarginTop"
+			>
+				<f:GridListItem>
+					<card:Card
+						word="{word}"
+						type="{cardType}"
+						showColor="{=
+							${/AmICaptain} || ${isRevealed}
+						}"
+						select="onCardSelect"
+					/>
+				</f:GridListItem>
+			</f:GridList>
+			<HBox
+				justifyContent="Center"
+				width="100%"
+			>
+				<ProgressIndicator
+					id="idProgressIndicatorTimer"
+					visible="{= !!${/Game/timerEnd}}"
+					displayValue="{
+						path: '/Game/timerEnd',
+						formatter: '.formatter.getSecondsBefore'
+					}"
+					state="Success"
+					percentValue="{
+						path: '/Game/timerEnd',
+						formatter: '.formatter.getSecondsBeforePercent'
+					}"
+				>
+					<layoutData>
+						<FlexItemData minWidth="100%"/>
+					</layoutData>
+				</ProgressIndicator>
+			</HBox>
+		</VBox>
+		<footer>
+			<Toolbar>
+				<Text text="Blue agents: {/Game/score/blueAgents}"/>
+				<Text text="Red agents: {/Game/score/redAgents}"/>
+				<ToolbarSpacer/>
+				<ToolbarSpacer/>
+				<Button
+					text="Finish move"
+					icon="sap-icon://accept"
+					press="onButtonFinishMovePress"
+				/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

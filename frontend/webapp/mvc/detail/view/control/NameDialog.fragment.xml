@@ -1,0 +1,37 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+	<Dialog
+		id="idDialogName"
+		horizontalScrolling="false"
+		busyIndicatorDelay="0"
+		contentWidth="auto"
+		title="Enter new name"
+		contentHeight="auto"
+	>
+		<VBox class="sapUiTinyMarginBeginEnd">
+			<Input
+				value="{/Name}"
+				placeholder="Enter new name here..."
+				submit="onInputSubmit"
+			/>
+		</VBox>
+		<buttons>
+			<Button
+				id="idButtonOk"
+				icon="sap-icon://accept"
+				type="Accept"
+				text="Ok"
+				press="_onDialogButtonOkPress"
+			/>
+			<Button
+				id="idButtonClose"
+				press="_onDialogButtonClosePress"
+				icon="sap-icon://sys-cancel"
+				type="Reject"
+				text="Cancel"
+			/>
+		</buttons>
+	</Dialog>
+</c:FragmentDefinition>

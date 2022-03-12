@@ -1,0 +1,140 @@
+<mvc:View
+	controllerName="com.codenames.fe.mvc.detail.controller.TeamBuilding"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	displayBlock="true"
+	xmlns:l="sap.ui.layout"
+	busyIndicatorDelay="0"
+	height="100%"
+>
+	<Page title="Games">
+		<customHeader>
+			<Toolbar>
+				<content>
+					<ToolbarSpacer/>
+					<ToolbarSpacer/>
+					<Title text="Game"/>
+					<ToolbarSpacer/>
+					<ToolbarSpacer/>
+					<Button
+						text="Change my name"
+						icon="sap-icon://edit"
+						type="Transparent"
+						press="onButtonChangeMyNamePress"
+					/>
+					<Button
+						text="Become a captain"
+						icon="sap-icon://manager"
+						type="Emphasized"
+						press="onButtonBecomeCaptainPress"
+					/>
+				</content>
+			</Toolbar>
+		</customHeader>
+		<content>
+			<l:Splitter>
+				<l:contentAreas>
+					<List items="{
+						path: '/Game/players',
+						templateShareable: false,
+						filters: [{
+							path: 'team',
+							operator: 'EQ',
+							value1: 'BlueAgents'
+						}]
+					}">
+						<layoutData>
+							<l:SplitterLayoutData size="50%"/>
+						</layoutData>
+						<headerToolbar>
+							<Toolbar>
+								<content>
+									<Title text="Blue Team"/>
+									<ToolbarSpacer/>
+									<ToolbarSpacer/>
+									<ToolbarSpacer/>
+									<Button
+										text="Join team"
+										icon="sap-icon://add-employee"
+										type="Emphasized"
+										press="onButtonJoinBlueTeamPress"
+									/>
+								</content>
+							</Toolbar>
+						</headerToolbar>
+						<ObjectListItem
+							icon="{=
+								${role} === 'Captain' ? 'sap-icon://manager' : 'sap-icon://employee'
+							}"
+							title="{name}"
+							highlight="{=
+								${role} === 'Captain' ? 'Warning' : 'Information'
+							}"
+							number="{=
+								${playerId} === ${GameListModel>/PlayerId} ? 'You' : ''
+							}"
+							numberState="Success"
+						/>
+					</List>
+					<List items="{
+						path: '/Game/players',
+						templateShareable: false,
+						filters: [{
+							path: 'team',
+							operator: 'EQ',
+							value1: 'RedAgents'
+						}]
+					}">
+						<layoutData>
+							<l:SplitterLayoutData size="50%"/>
+						</layoutData>
+						<headerToolbar>
+							<Toolbar>
+								<content>
+									<Title text="Red Team"/>
+									<ToolbarSpacer/>
+									<ToolbarSpacer/>
+									<ToolbarSpacer/>
+									<Button
+										text="Join team"
+										icon="sap-icon://add-employee"
+										type="Reject"
+										press="onButtonJoinRedTeamPress"
+									/>
+								</content>
+							</Toolbar>
+						</headerToolbar>
+						<ObjectListItem
+							highlight="{=
+								${role} === 'Captain' ? 'Warning' : 'Information'
+							}"
+							icon="{=
+								${role} === 'Captain' ? 'sap-icon://manager' : 'sap-icon://employee'
+							}"
+							number="{=
+								${playerId} === ${GameListModel>/PlayerId} ? 'You' : ''
+							}"
+							numberState="Success"
+							title="{name}"
+						/>
+					</List>
+				</l:contentAreas>
+			</l:Splitter>
+		</content>
+		<footer>
+			<Toolbar>
+				<content>
+					<ToolbarSpacer/>
+					<ToolbarSpacer/>
+					<ToolbarSpacer/>
+					<Button
+						type="Accept"
+						text="Start Game"
+						icon="sap-icon://accept"
+						press="onButtonStartGamePress"
+					/>
+				</content>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

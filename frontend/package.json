@@ -1,0 +1,48 @@
+{
+	"name": "codenames",
+	"version": "1.0.0",
+	"description": "Codenames",
+	"private": true,
+	"scripts": {
+		"serve": "ui5 serve",
+		"build": "ui5 build",
+		"lint": "eslint ."
+	},
+	"directories": {
+		"src": "src"
+	},
+	"keywords": [],
+	"author": "Ilja Postnovs",
+	"contributors": [
+		"Ilja Postnovs <ilja.postnovs@gmail.com>"
+	],
+	"devDependencies": {
+		"@sap/ux-ui5-tooling": "^1.4.4",
+		"@ui5/cli": "^2.14.1",
+		"eslint": "^8.4.0",
+		"ui5-middleware-livereload": "^0.5.8",
+		"ui5-middleware-simpleproxy": "^0.7.5"
+	},
+	"ui5": {
+		"ui5parser": {
+			"ui5version": "1.89.0"
+		},
+		"ui5linter": {
+			"jsLinterExceptions": [
+				{
+					"className": "any[]",
+					"memberName": "splice",
+					"applyToChildren": true
+				}
+			]
+		},
+		"dependencies": [
+			"ui5-middleware-livereload",
+			"ui5-middleware-simpleproxy",
+			"@sap/ux-ui5-tooling"
+		]
+	},
+	"dependencies": {
+		"ui5plugin-linter": "^0.5.22"
+	}
+}

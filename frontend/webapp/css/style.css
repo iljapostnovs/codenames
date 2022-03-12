@@ -1,0 +1,44 @@
+.comEvolutionCard {
+	width: 160px;
+	height: 120px;
+	/* margin: 4px; */
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	border-radius: 5px;
+}
+
+.editGrid > .sapFGridListDefault {
+	justify-items: start;
+}
+
+.comEvolutionCardAssassin {
+	background-color: gray;
+}
+.comEvolutionCardBlue {
+	background-color: lightblue;
+}
+.comEvolutionCardRed {
+	background-color: lightcoral;
+}
+.comEvolutionCardInnocent {
+	background-color: lightgray;
+}
+.comEvolutionCardUnknown {
+	background-color: antiquewhite;
+}
+
+.comEvolutionCard:active {
+	background-color: bisque;
+}
+
+.comEvolutionCardWord {
+	width: 90%;
+	margin: 10px;
+	height: 20px;
+	padding: 4px;
+	position: relative;
+	color: black;
+	text-align: center;
+	background-color: white;
+}

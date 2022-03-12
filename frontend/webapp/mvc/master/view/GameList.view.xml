@@ -1,0 +1,44 @@
+<mvc:View
+	controllerName="com.codenames.fe.mvc.master.controller.GameList"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	displayBlock="true"
+	busyIndicatorDelay="0"
+	height="100%"
+>
+	<Page title="Games">
+		<List
+			id="idListGames"
+			items="{/Games}"
+			mode="SingleSelectMaster"
+			busyIndicatorDelay="0"
+			selectionChange="onListGamesSelectionChange"
+		>
+			<ObjectListItem
+				title="{name}"
+				highlight="{
+					path: 'state',
+					formatter: '.formatter.getHighlightForState'
+				}"
+			>
+				<attributes>
+					<ObjectAttribute text="Players: {= ${players}.length}"/>
+				</attributes>
+				<firstStatus>
+				</firstStatus>
+			</ObjectListItem>
+		</List>
+		<footer>
+			<Toolbar>
+				<content>
+					<ToolbarSpacer/>
+					<Button
+						icon="sap-icon://add"
+						text="Create game"
+						press="onButtonCreateGamePress"
+					/>
+				</content>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,167 @@
+@startuml ClassDiagram
+set namespaceSeparator none
+skinparam dpi 300
+
+namespace game {
+
+	class Game {
+		+gameId: GameId
+		+players: List[Player]
+		+state: State
+		+board: List[Card]
+		+word: Option[CaptainWord]
+		+wordCount: Option[WordCount]
+		+score: GameScore
+		+timerEnd: Option[Instant]
+		+setTimerEnd(timerEnd: Option[Instant]): Game
+		+addPlayer(player: Player): Game
+		+removePlayer(player: Player): Game
+		+replacePlayer(newPlayer: Player): Game
+		+setState(state: State): Game
+		+setWord(word: Option[CaptainWord], wordCount: Option[WordCount]): Game
+		+revealCard(card: Card): Game
+		+increaseScore(team: Team): Game
+		+ {static} generateBoard(): IO[Validated[NonEmptyChain[Word.Error], List[Card]]]
+		- {static} generateWords(): IO[List[AllErrorsOr[Word]]]
+		+ {static} create(gameId: GameId, predefinedBoard: Option[List[Card]]): IO[Validated[NonEmptyChain[Word.Error], Game]]
+	}
+
+	class Player {
+		+playerId: PlayerId
+		+name: PlayerName
+		+team: Option[Team]
+		+ role: Option[PlayerRole]
+		+ setTeam(team: Option[Team]): Player
+		+ setRole(role: Option[PlayerRole]): Player
+		+ setName(name: PlayerName): Player
+		+ {static} create(name: PlayerName): Player
+	}
+
+	namespace team {
+		interface Team {
+			+ {static} getNext(): Team
+		}
+		class BlueAgents extends Team
+		class RedAgents extends Team
+	}
+
+	namespace card {
+
+		class Card {
+			+cardId: CardId
+			+word: Word
+			+cardType: CardType
+			+isRevealed: Boolean
+			+reveal(): Card
+			+ {static} create(word: Word, cardType: CardType): Card
+		}
+
+		interface CardType
+		class BlueAgent         extends CardType
+		class RedAgent          extends CardType
+		class InnocentBystander extends CardType
+		class Assassin          extends CardType
+	}
+
+	namespace state {
+		interface State
+		class TeamBuilding extends State
+		class CaptainThinking  extends State {
+			+team: Team
+		}
+		class TeamThinking  extends State {
+			+team: Team
+		}
+		class FinishedGame extends State
+	}
+
+	namespace Action {
+		interface Action {
+			+perform(): IO[Either[ErrorMessage, Game]]
+		}
+
+		class CreateGame extends Action {
+			+gameId: GameId
+			+board: Option[List[Card]]
+		}
+		class JoinGame extends Action {
+			+gameId: GameId
+			+playerId: PlayerId
+		}
+		class JoinTeam extends Action {
+			+gameId: GameId
+			+playerId: PlayerId,
+			+team: Team
+		}
+		class ChangePlayerName extends Action {
+			+gameId: GameId
+			+playerId: PlayerId
+			+newName: PlayerName
+		}
+		class BecomeCaptain extends Action {
+			+gameId: GameId
+			+playerId: PlayerId
+		}
+		class StartGame extends Action {
+			+gameId: GameId
+		}
+		class ProvideWord extends Action {
+			+gameId: GameId
+			+playerId: PlayerId
+			+word: CaptainWord
+			+count: WordCount
+		}
+		class ChooseCard extends Action {
+			+gameId: GameId
+			+playerId: PlayerId
+			+cardId: CardId
+		}
+		class FinishMove extends Action {
+			+gameId: GameId
+			+playerId: PlayerId
+		}
+	}
+}
+
+namespace jsoncodec {
+	class Codecs {
+		+encodeInstant: Encoder[Instant]
+		+encodeUUID: Encoder[UUID]
+		+encodePlayerName: Encoder[PlayerName]
+		+encodeCaptainWord: Encoder[CaptainWord]
+		+encodeTeamScore: Encoder[TeamScore]
+		+encodeWordCount: Encoder[WordCount]
+		+encodeTeam: Encoder[Team]
+		+encodePlayerRole: Encoder[PlayerRole]
+		+encodeState: Encoder[State]
+		+encodeWord: Encoder[Word]
+		+encodeCardType: Encoder[CardType]
+	}
+}
+namespace server {
+	class GameServer {
+		-httpApp: IO[HttpApp[IO]]
+	}
+	class GameTimer {
+		+gameId: GameId
+		+timeoutRef: Ref[IO, Map[GameId, Fiber[IO, Unit]]]
+		+gamesRef: Ref[IO, Map[GameId, Game]]
+		+gameTopic: Topic[IO, Option[Game]]
+		+timeoutSeconds: Int = 60
+		+cancelPreviousTimer(): IO[Unit]
+		+setTimerAndPublish(): IO[Unit]
+	}
+	class QueryMatcher {
+		+ teamDecoder: QueryParamDecoder[Team]
+		+ uuidDecoder: QueryParamDecoder[UUID]
+		+ playerNameDecoder: QueryParamDecoder[PlayerName]
+		+ captainWordDecoder: QueryParamDecoder[CaptainWord]
+		+ wordCountDecoder: QueryParamDecoder[WordCount]
+	}
+
+	GameServer --> GameTimer
+	GameServer --> QueryMatcher
+	GameServer --> Codecs
+	GameServer --> Action
+}
+@enduml

@@ -1,0 +1,27 @@
+@startuml ClassDiagram
+skinparam dpi 300
+
+Client -> GameServer: POST chooseCard
+activate Client
+activate GameServer
+GameServer -> ChooseCard : performAction
+activate ChooseCard
+ChooseCard -> ChooseCard: gather necessary data (game, player, card)
+ChooseCard -> ChooseCard: validate
+ChooseCard -> ChooseCard: updateGame
+GameServer <-- ChooseCard: updated game
+deactivate ChooseCard
+GameServer -> GameTimer: cancelPreviousTimer
+GameServer -> GameTimer: setTimerAndPublish
+activate GameTimer
+GameTimer -> WebSocket: publish
+activate WebSocket
+Client <-- WebSocket: Game
+GameTimer <-- WebSocket
+deactivate WebSocket
+GameServer <-- GameTimer
+deactivate GameTimer
+Client <-- GameServer: Accepted
+deactivate GameServer
+
+@enduml

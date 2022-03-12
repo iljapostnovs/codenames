@@ -1,0 +1,24 @@
+specVersion: "2.0"
+metadata:
+  name: codenames
+type: application
+server:
+  settings:
+    httpPort: 8080
+    httpsPort: 8081
+  customMiddleware:
+  - name: fiori-tools-proxy
+    afterMiddleware: compression
+    configuration:
+      ignoreCertError: true # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+      backend:
+      - path: /service
+        url: http://127.0.0.1:9001
+        ws: true
+builder:
+  resources:
+    excludes:
+      - "/**/data/**"
+framework:
+  name: SAPUI5
+  version: 1.71.15

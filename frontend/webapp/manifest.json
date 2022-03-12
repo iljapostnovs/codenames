@@ -1,0 +1,151 @@
+{
+	"_version": "1.1.0",
+	"sap.app": {
+		"_version": "1.1.0",
+		"id": "com.codenames.fe",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{App.Title}}",
+		"description": "{{App.Description}}"
+	},
+	"sap.ui": {
+		"_version": "1.1.0",
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_belize"
+		],
+		"fullWidth": true
+	},
+	"sap.ui5": {
+		"_version": "1.1.0",
+		"rootView": {
+			"viewName": "com.codenames.fe.mvc.app.App",
+			"type": "XML",
+			"async": true,
+			"id": "idApp"
+		},
+		"dependencies": {
+			"minUI5Version": "1.71.15",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.f": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.codenames.fe.i18n.i18n"
+				}
+			},
+			"SupportModel": {
+				"type": "sap.ui.model.json.JSONModel"
+			},
+			"GameListModel": {
+				"type": "com.codenames.fe.mvc.master.model.GameListModel"
+			},
+			"TeamBuildingModel": {
+				"type": "com.codenames.fe.mvc.detail.model.TeamBuildingModel"
+			},
+			"GameModel": {
+				"type": "com.codenames.fe.mvc.game.model.GameModel"
+			}
+		},
+		"config": {
+			"i18nBundle": "com.codenames.fe.i18n.i18n"
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.f.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.codenames.fe.mvc",
+				"controlId": "idFlexibleColumnLayout",
+				"controlAggregation": "beginColumnPages",
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "Master",
+					"target": [
+						"Master"
+					]
+				},
+				{
+					"pattern": "TeamBuilding({GameId})",
+					"name": "TeamBuilding",
+					"target": [
+						"Master",
+						"TeamBuilding"
+					]
+				},
+				{
+					"pattern": "Game({GameId})",
+					"name": "Game",
+					"target": [
+						"Master",
+						"Game"
+					]
+				},
+				{
+					"pattern": "Error",
+					"name": "Error",
+					"target": "Error"
+				}
+			],
+			"targets": {
+				"Master": {
+					"viewName": "master.view.GameList",
+					"viewLevel": 1,
+					"transition": "show"
+				},
+				"TeamBuilding": {
+					"viewName": "detail.view.TeamBuilding",
+					"viewLevel": 2,
+					"transition": "show",
+					"controlAggregation": "midColumnPages"
+				},
+				"Game": {
+					"viewName": "game.view.Game",
+					"viewLevel": 3,
+					"transition": "show",
+					"controlAggregation": "midColumnPages"
+				},
+				"Error": {
+					"viewName": "error.Error",
+					"viewLevel": 1,
+					"controlAggregation": "pages",
+					"controlId": "idAppError"
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		}
+	}
+}
